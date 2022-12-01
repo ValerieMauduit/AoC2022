@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import argparse
 
-from all_days import day00
+from all_days import day01
 
 
 def main():
@@ -12,8 +12,8 @@ def main():
     args = parser.parse_args()
 
     if args.day == 1:
-        day00.run(args.dir, args.star)
-    # elif args.day == 1:
+        day01.run(args.dir, args.star)
+    # elif args.day == 2:
     #     day01.run(args.dir, args.star)
     else:
         raise Exception("Day isn't already coded")
