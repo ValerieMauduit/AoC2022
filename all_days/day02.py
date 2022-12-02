@@ -10,27 +10,49 @@
 # you were to follow the strategy guide.
 # What would your total score be if everything goes exactly according to your strategy guide?
 
-# Second star: description
+# Second star: Anyway, the second column says how the round needs to end:
+# X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win.
+# The total score is still calculated in the same way, but now you need to figure out what shape to choose so the round
+# ends as indicated.
+# Following the Elf's instructions for the second column, what would your total score be if everything goes exactly
+# according to your strategy guide?
 
-def explicit_round(rps_round):
-    translation = {'A': 'rock', 'B': 'paper', 'C': 'scissors', 'X': 'rock', 'Y': 'paper', 'Z': 'scissors'}
-    return [translation[rps_round[0]], translation[rps_round[2]]]
+BETTER_THAN = {'A': 'Z', 'B': 'X', 'C': 'Y', 'X': 'C', 'Y': 'A', 'Z': 'B'}
+EQUIVALENT = {'A': 'X', 'B': 'Y', 'C': 'Z', 'X': 'A', 'Y': 'B', 'Z': 'C'}
+SHAPE_SCORE = {'X': 1, 'Y': 2, 'Z': 3, 'A': 1, 'B': 2, 'C': 3}
+WIN_LOSS_SCORES = {'X': 0, 'Y': 3, 'Z': 6}
 
 
 def score(rps_round):
-    better_than = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
-    if better_than[rps_round[1]] == rps_round[0]:
+    if BETTER_THAN[rps_round[1]] == rps_round[0]:
         return 6
-    elif rps_round[1] == rps_round[0]:
+    elif rps_round[1] == EQUIVALENT[rps_round[0]]:
         return 3
     return 0
 
 
-def calculate_score(data):
-    intelligible_rounds = [explicit_round(rps_round) for rps_round in data]
-    shape_score = {'rock': 1, 'paper': 2, 'scissors': 3}
-    scores = [shape_score[rps_round[1]] + score(rps_round) for rps_round in intelligible_rounds]
+def calculate_score_my_way(data):
+    rps_rounds = [[rps_round[0], rps_round[2]] for rps_round in data]
+    scores = [SHAPE_SCORE[rps_round[1]] + score(rps_round) for rps_round in rps_rounds]
+    print(scores)
     return sum(scores)
+
+
+def guess_choice(opponent, result):
+    if result == 'X': # lose
+        return BETTER_THAN[opponent]
+    elif result == 'Y': # draw
+        return opponent
+    elif result == 'Z': # win
+        return [k for k in BETTER_THAN if BETTER_THAN[k] == opponent][0]
+    else:
+        Exception(f"This choice -{result}- is not recognized.")
+
+
+def calculate_score_elves_way(data):
+    forecasted_choices = [guess_choice(rps_round[0], rps_round[2]) for rps_round in data]
+    shape_scores = [SHAPE_SCORE[rps_guess] for rps_guess in forecasted_choices]
+    return sum(shape_scores) + sum([WIN_LOSS_SCORES[rps_round[2]] for rps_round in data])
 
 
 def run(data_dir, star):
@@ -38,9 +60,9 @@ def run(data_dir, star):
         data = [x for x in fic.read().split('\n')[:-1]]
 
     if star == 1:  # The final answer is: 11767
-        solution = calculate_score(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func() + my_func()
+        solution = calculate_score_my_way(data)
+    elif star == 2:  # The final answer is: 13886
+        solution = calculate_score_elves_way(data)
     else:
         raise Exception('Star number must be either 1 or 2.')
 

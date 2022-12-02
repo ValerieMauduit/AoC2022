@@ -12,15 +12,15 @@ def test_sets():
     return [
         {
             'number': 1,
-            'input': ['AY', 'BX', 'CZ'],
+            'input': ['A Y', 'B X', 'C Z'],
             'expected1': 15,
-            'expected2': []
+            'expected2': 12
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day02.calculate_score(test_data)
+    solution = day02.calculate_score_my_way(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day02.yyy(test_data)
+    solution = day02.calculate_score_elves_way(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
