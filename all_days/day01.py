@@ -1,4 +1,4 @@
-# Day1: title
+# Day1: Calorie Counting
 
 # First star:
 # The Elves take turns writing down the number of Calories contained by the various meals, snacks, rations, etc. that
