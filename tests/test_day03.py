@@ -17,7 +17,7 @@ def test_sets():
                 'wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn', 'ttgJtRGJQctTZtZT', 'CrZsJsPPZsGzwwsLwLmpwMDw'
             ],
             'expected1': [['p', 'L', 'P', 'v', 't', 's'], 157],
-            'expected2': []
+            'expected2': [['r', 'Z'], 70]
         },
     ]
 
@@ -32,7 +32,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day03.yyy(test_data)
+    solution = day03.groups_score(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
