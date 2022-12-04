@@ -14,13 +14,13 @@ def test_sets():
             'number': 1,
             'input': [['2-4','6-8'], ['2-3','4-5'], ['5-7','7-9'], ['2-8','3-7'], ['6-6','4-6'], ['2-6','4-8']],
             'expected1': 2,
-            'expected2': []
+            'expected2': 4
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day04.overlap_count(test_data)
+    solution = day04.total_overlap_count(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day04.yyy(test_data)
+    solution = day04.partial_overlap_count(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)

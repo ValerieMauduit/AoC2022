@@ -7,9 +7,11 @@
 # Some of the pairs have noticed that one of their assignments fully contains the other.
 # In how many assignment pairs does one range fully contain the other?
 
-# Second star: description
+# Second star: It seems like there is still quite a bit of duplicate work planned. Instead, the Elves would like to
+# know the number of pairs that overlap at all.
+# In how many assignment pairs do the ranges overlap?
 
-def overlap_count(data):
+def total_overlap_count(data):
     count = 0
     for section in data:
         elf1 = [int(x) for x in section[0].split('-')]
@@ -19,14 +21,24 @@ def overlap_count(data):
     return count
 
 
+def partial_overlap_count(data):
+    count = 0
+    for section in data:
+        elf1 = [int(x) for x in section[0].split('-')]
+        elf2 = [int(x) for x in section[1].split('-')]
+        if (elf1[1] - elf2[0]) * (elf1[0] - elf2[1]) <= 0:
+            count += 1
+    return count
+
+
 def run(data_dir, star):
     with open(f'{data_dir}/input-day04.txt', 'r') as fic:
         data = [x.split(',') for x in fic.read().split('\n')[:-1]]
 
     if star == 1:  # The final answer is: 494
-        solution = overlap_count(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func() + my_func()
+        solution = total_overlap_count(data)
+    elif star == 2:  # The final answer is: 833
+        solution = partial_overlap_count(data)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
