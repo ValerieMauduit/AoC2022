@@ -20,7 +20,7 @@ def test_sets():
 
 
 def test_first_star(test_data, expected):
-    solution = day00.xxx(test_data)
+    solution = day00.my_func(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day00.yyy(test_data)
+    solution = day00.my_func(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)

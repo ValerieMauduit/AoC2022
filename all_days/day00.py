@@ -1,11 +1,11 @@
-# Day1: title
+# Day0: title
 
 # First star: description
 
 # Second star: description
 
-def my_func():
-    return 42
+def my_func(data):
+    return data
 
 
 def run(data_dir, star):
@@ -13,9 +13,9 @@ def run(data_dir, star):
         data = [int(x) for x in fic.read().split('\n')[:-1]]
 
     if star == 1:  # The final answer is:
-        solution = my_func()
+        solution = my_func(data)
     elif star == 2:  # The final answer is:
-        solution = my_func() + my_func()
+        solution = my_func(data)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
