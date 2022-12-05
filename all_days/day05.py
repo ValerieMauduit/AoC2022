@@ -8,7 +8,10 @@
 # first crate to be moved ends up below the second, tbc. After the rearrangement procedure completes, what crate ends up
 # on top of each stack?
 
-# Second star: description
+# Second star: The crane isn't a CrateMover 9000 - it's a CrateMover 9001. The CrateMover 9001 has the ability to pick
+# up and move multiple crates at once. The action of moving n crates from stack p to stack q means that those n moved
+# crates stay in the same order.
+# After the rearrangement procedure completes, what crate ends up on top of each stack?
 
 import numpy as np
 
@@ -27,7 +30,7 @@ def format_data(data):
     return arranged_data
 
 
-def execute_move(stacks, move):
+def execute_move_9000(stacks, move):
     commands = move.split(' ')
     count_crates = int(commands[1])
     from_stack = int(commands[3]) - 1
@@ -38,9 +41,22 @@ def execute_move(stacks, move):
     return stacks
 
 
-def move_stacks_and_get_tops(data):
+def execute_move_9001(stacks, move):
+    commands = move.split(' ')
+    count_crates = int(commands[1])
+    from_stack = int(commands[3]) - 1
+    to_stack = int(commands[5]) - 1
+    stacks[to_stack] = stacks[from_stack][0:count_crates] + stacks[to_stack]
+    stacks[from_stack] = stacks[from_stack][count_crates:]
+    return stacks
+
+
+def move_stacks_and_get_tops(data, crane_version):
     for move in data['moves']:
-        data['stacks'] = execute_move(data['stacks'], move)
+        if crane_version == 9000:
+            data['stacks'] = execute_move_9000(data['stacks'], move)
+        elif crane_version == 9001:
+            data['stacks'] = execute_move_9001(data['stacks'], move)
     return [data['stacks'], ''.join([stack[0] for stack in data['stacks']])]
 
 
@@ -50,9 +66,9 @@ def run(data_dir, star):
     formatted_data = format_data(data)
 
     if star == 1:  # The final answer is:
-        solution = move_stacks_and_get_tops(formatted_data)
+        solution = move_stacks_and_get_tops(formatted_data, 9000)
     elif star == 2:  # The final answer is:
-        solution = my_func(data)
+        solution = move_stacks_and_get_tops(formatted_data, 9001)
     else:
         raise Exception('Star number must be either 1 or 2.')
 

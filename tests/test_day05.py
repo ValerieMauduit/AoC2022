@@ -17,13 +17,13 @@ def test_sets():
                 'moves' : ['move 1 from 2 to 1', 'move 3 from 1 to 3', 'move 2 from 2 to 1', 'move 1 from 1 to 2']
             },
             'expected1': [[['C'], ['M'], ['Z', 'N', 'D', 'P']], 'CMZ'],
-            'expected2': []
+            'expected2': [[['M'], ['C'], ['D', 'N', 'Z', 'P']], 'MCD']
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day05.move_stacks_and_get_tops(test_data)
+    solution = day05.move_stacks_and_get_tops(test_data, 9000)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -32,7 +32,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day05.my_func(test_data)
+    solution = day05.move_stacks_and_get_tops(test_data, 9001)
     if solution != expected:
         print("Your output is:")
         print(solution)
