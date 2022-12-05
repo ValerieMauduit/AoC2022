@@ -5,22 +5,25 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from all_days import day00
+from all_days import day05
 
 
 def test_sets():
     return [
         {
             'number': 1,
-            'input': [],
-            'expected1': [],
-            'expected2': []
+            'input': {
+                'stacks': [['N', 'Z'], ['D', 'C', 'M'], ['P']],
+                'moves' : ['move 1 from 2 to 1', 'move 3 from 1 to 3', 'move 2 from 2 to 1', 'move 1 from 1 to 2']
+            },
+            'expected1': [[['C'], ['M'], ['Z', 'N', 'D', 'P']], 'CMZ'],
+            'expected2': [[['M'], ['C'], ['D', 'N', 'Z', 'P']], 'MCD']
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day00.my_func(test_data)
+    solution = day05.move_stacks_and_get_tops(test_data, 9000)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +32,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day00.my_func(test_data)
+    solution = day05.move_stacks_and_get_tops(test_data, 9001)
     if solution != expected:
         print("Your output is:")
         print(solution)
