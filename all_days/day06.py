@@ -10,14 +10,14 @@
 #
 # Second star: description
 
-def detect_position(data):
-    n = 3
+def detect_position(data, length):
+    n = length - 1
     all_different = False
     while not all_different:
         n += 1
         subset = []
-        subset[:0] = data[(n - 4):n]
-        all_different = (len(set(subset)) == 4)
+        subset[:0] = data[(n - length):n]
+        all_different = (len(set(subset)) == length)
     return n
 
 
@@ -25,10 +25,10 @@ def run(data_dir, star):
     with open(f'{data_dir}/input-day06.txt', 'r') as fic:
         data = fic.read()[:-1]
 
-    if star == 1:  # The final answer is:
-        solution = detect_position(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    if star == 1:  # The final answer is: 1198
+        solution = detect_position(data, 4)
+    elif star == 2:  # The final answer is: 3120
+        solution = detect_position(data, 14)
     else:
         raise Exception('Star number must be either 1 or 2.')
 

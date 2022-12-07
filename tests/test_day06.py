@@ -14,37 +14,37 @@ def test_sets():
             'number': 1,
             'input': 'mjqjpqmgbljsphdztnvjfqwrcgsmlb',
             'expected1': 7,
-            'expected2': []
+            'expected2': 19
         },
         {
             'number': 2,
             'input': 'bvwbjplbgvbhsrlpgdmjqwftvncz',
             'expected1': 5,
-            'expected2': []
+            'expected2': 23
         },
         {
             'number': 3,
             'input': 'nppdvjthqldpwncqszvftbrmjlhg',
             'expected1': 6,
-            'expected2': []
+            'expected2': 23
         },
         {
             'number': 4,
             'input': 'nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg',
             'expected1': 10,
-            'expected2': []
+            'expected2': 29
         },
         {
             'number': 5,
             'input': 'zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw',
             'expected1': 11,
-            'expected2': []
+            'expected2': 26
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day06.detect_position(test_data)
+    solution = day06.detect_position(test_data, 4)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -53,7 +53,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day06.my_func(test_data)
+    solution = day06.detect_position(test_data, 14)
     if solution != expected:
         print("Your output is:")
         print(solution)
