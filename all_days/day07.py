@@ -18,7 +18,7 @@
 # Since the disk is full, your first step should probably be to find directories that are good candidates for deletion.
 # To do this, you need to determine the total size of each directory. Find all of the directories with a total size of
 # at most 100000. What is the sum of the total sizes of those directories?
-
+#
 # Second star: The total disk space available to the filesystem is 70000000. To run the update, you need unused space of
 # at least 30000000. You need to find a directory you can delete that will free up enough space to run the update.
 # Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update. What is
