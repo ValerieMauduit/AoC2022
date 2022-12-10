@@ -14,7 +14,7 @@ def test_sets():
             'number': 1,
             'input': ['30373', '25512', '65332', '33549', '35390'],
             'expected1': 21,
-            'expected2': []
+            'expected2': 8
         },
     ]
 
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day08.my_func(test_data)
+    solution = day08.best_score(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
