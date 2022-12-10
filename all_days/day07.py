@@ -19,7 +19,10 @@
 # To do this, you need to determine the total size of each directory. Find all of the directories with a total size of
 # at most 100000. What is the sum of the total sizes of those directories?
 
-# Second star: description
+# Second star: The total disk space available to the filesystem is 70000000. To run the update, you need unused space of
+# at least 30000000. You need to find a directory you can delete that will free up enough space to run the update.
+# Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update. What is
+# the total size of that directory?
 
 class Directory:
     def __init__(self, name):
@@ -92,7 +95,7 @@ class File:
         self.size = size
 
 
-def find_small_dirs(data):
+def create_dir_tree(data):
     current_directory = Directory(None)
     for line in data:
         if line[0] == '$':
@@ -107,8 +110,18 @@ def find_small_dirs(data):
             current_directory.add_file(File(name, int(size)))
     while current_directory.parentDir:
         current_directory.move_to('..')
-    sub_dirs_sizes = current_directory.sub_dirs_sizes()
-    return sum([size for size in sub_dirs_sizes if size <= 100000])
+    return current_directory
+
+
+def find_small_dirs(commands):
+    return sum([size for size in create_dir_tree(commands).sub_dirs_sizes() if size <= 100000])
+
+
+def find_dir_to_delete(commands, memory_space, needed_space):
+    head_directory = create_dir_tree(commands)
+    filling = head_directory.size()
+    available_space = memory_space - filling
+    return min([size for size in head_directory.sub_dirs_sizes() if size >= needed_space - available_space])
 
 
 def run(data_dir, star):
@@ -117,8 +130,8 @@ def run(data_dir, star):
 
     if star == 1:  # The final answer is: 1443806
         solution = find_small_dirs(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 942298
+        solution = find_dir_to_delete(data, 70000000, 30000000)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
