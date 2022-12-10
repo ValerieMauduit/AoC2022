@@ -18,7 +18,7 @@ def test_sets():
                 '4060174 j', '8033020 d.log', '5626152 d.ext', '7214296 k'
             ],
             'expected1': 95437,
-            'expected2': []
+            'expected2': 24933642
         },
     ]
 
