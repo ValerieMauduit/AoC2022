@@ -127,6 +127,7 @@ def find_dir_to_delete(commands, memory_space, needed_space):
 def run(data_dir, star):
     with open(f'{data_dir}/input-day07.txt', 'r') as fic:
         data = [x for x in fic.read().split('\n')[:-1]]
+
     if star == 1:  # The final answer is: 1443806
         solution = find_small_dirs(data)
     elif star == 2:  # The final answer is: 942298

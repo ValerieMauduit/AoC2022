@@ -11,50 +11,62 @@
 # or column, the tail always moves one step diagonally to keep up. Simulate your complete hypothetical series of
 # motions. How many positions does the tail of the rope visit at least once?
 
-# Second star: description
-
-def move(previous_position, command):
-    n_moves = int(command[1])
-    if command[0] == 'R':
-        heads = [(previous_position['head'][0], previous_position['head'][1] + n + 1) for n in range(n_moves)]
-    elif command[0] == 'L':
-        heads = [(previous_position['head'][0], previous_position['head'][1] - n - 1) for n in range(n_moves)]
-    elif command[0] == 'U':
-        heads = [(previous_position['head'][0] + n + 1, previous_position['head'][1]) for n in range(n_moves)]
-    elif command[0] == 'D':
-        heads = [(previous_position['head'][0] - n - 1, previous_position['head'][1]) for n in range(n_moves)]
-    else:
-        Exception(f'This command ({command}) is not permitted')
-    tails = [previous_position['tail']]
-    for n in range(n_moves):
-        if tails[-1][0] - heads[n][0] > 1:
-            tails += [(heads[n][0] + 1, heads[n][1])]
-        elif tails[-1][0] - heads[n][0] < -1:
-            tails += [(heads[n][0] - 1, heads[n][1])]
-        elif tails[-1][1] - heads[n][1] > 1:
-            tails += [(heads[n][0], heads[n][1] + 1)]
-        elif tails[-1][1] - heads[n][1] < -1:
-            tails += [(heads[n][0], heads[n][1] - 1)]
-    return {'head': heads, 'tail': tails[1:]}
+# Second star: Rather than two knots, you now must simulate a rope consisting of ten knots. One knot is still the head
+# of the rope and moves according to the series of motions. Each knot further down the rope follows the knot in front of
+# it using the same rules as before. Now, you need to keep track of the positions the new tail visits. Simulate your
+# complete series of motions on a larger rope with ten knots. How many positions does the tail of the rope visit at
+# least once?
 
 
-def count_tail_positions(data):
-    commands = [x.split(' ') for x in data]
-    rope_positions = {'head': [(0, 0)], 'tail': [(0, 0)]}
+def follow_previous(previous_node):
+    follower_positions = [(0, 0)]
+    for leader in previous_node:
+        follower = follower_positions[-1]
+        if follower[0] - leader[0] > 1:
+            follower_positions += [(leader[0] + 1, max([min([leader[1], follower[1] + 1]), follower[1] - 1]))]
+        elif follower[0] - leader[0] < -1:
+            follower_positions += [(leader[0] - 1, max([min([leader[1], follower[1] + 1]), follower[1] - 1]))]
+        elif follower[1] - leader[1] > 1:
+            follower_positions += [(max([min([leader[0], follower[0] + 1]), follower[0] - 1]), leader[1] + 1)]
+        elif follower[1] - leader[1] < -1:
+            follower_positions += [(max([min([leader[0], follower[0] + 1]), follower[0] - 1]), leader[1] - 1)]
+    return follower_positions
+
+
+def move_head(commands):
+    positions = [(0, 0)]
     for command in commands:
-        new_positions = move({ k: rope_positions[k][-1] for k in rope_positions}, command)
-        rope_positions = {k: rope_positions[k] + new_positions[k] for k in rope_positions}
-    return len(set(rope_positions['tail']))
+        n_moves = int(command[1])
+        previous_position = positions[-1]
+        if command[0] == 'R':
+            positions += [(previous_position[0], previous_position[1] + n + 1) for n in range(n_moves)]
+        elif command[0] == 'L':
+            positions += [(previous_position[0], previous_position[1] - n - 1) for n in range(n_moves)]
+        elif command[0] == 'U':
+            positions += [(previous_position[0] + n + 1, previous_position[1]) for n in range(n_moves)]
+        elif command[0] == 'D':
+            positions += [(previous_position[0] - n - 1, previous_position[1]) for n in range(n_moves)]
+        else:
+            Exception(f'This command ({command}) is not permitted')
+    return positions
+
+
+def count_tail_positions(data, rope_length):
+    commands = [x.split(' ') for x in data]
+    head_positions = move_head(commands)
+    node_positions = head_positions
+    for node in range(rope_length - 1):
+        node_positions = follow_previous(node_positions)
+    return len(set(node_positions))
 
 
 def run(data_dir, star):
     with open(f'{data_dir}/input-day09.txt', 'r') as fic:
         data = [x for x in fic.read().split('\n')[:-1]]
-
     if star == 1:  # The final answer is: 6470
-        solution = count_tail_positions(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+        solution = count_tail_positions(data, 2)
+    elif star == 2:  # The final answer is: 2658
+        solution = count_tail_positions(data, 10)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
