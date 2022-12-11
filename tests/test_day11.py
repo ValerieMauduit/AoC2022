@@ -19,13 +19,12 @@ def test_sets():
                 'Monkey 3:\nStarting items: 74\nOperation: new = old + 3\nTest: divisible by 17\nIf true: throw to monkey 0\nIf false: throw to monkey 1'
             ],
             'expected1': [[101, 95, 7, 105], 10605],
-            'expected2': []
+            'expected2': [[52166, 47830, 1938, 52013], 2713310158]
         },
     ]
 
-
 def test_first_star(test_data, expected):
-    solution = day11.monkey_business_score(test_data, 20)
+    solution = day11.monkey_business_score(test_data, 20, 3)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -34,7 +33,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day11.my_func(test_data)
+    solution = day11.monkey_business_score(test_data, 10000, 1)
     if solution != expected:
         print("Your output is:")
         print(solution)
