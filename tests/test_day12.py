@@ -14,13 +14,13 @@ def test_sets():
             'number': 1,
             'input': ['Sabqponm', 'abcryxxl', 'accszExk', 'acctuvwj', 'abdefghi'],
             'expected1': 31,
-            'expected2': []
+            'expected2': 29
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day12.get_path(test_data)
+    solution = day12.get_path(test_data, ['S'])
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day12.my_func(test_data)
+    solution = day12.get_path(test_data, ['S', 'a'])
     if solution != expected:
         print("Your output is:")
         print(solution)

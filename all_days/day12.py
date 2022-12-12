@@ -12,14 +12,19 @@
 # elevation of the destination square can be much lower than the elevation of your current square.
 # What is the fewest steps required to move from your current position to the location that should get the best signal?
 
-# Second star: description
+# Second star: To maximize exercise while hiking, the trail should start as low as possible: elevation a. The goal is
+# still the square marked E. However, the trail should still be direct, taking the fewest steps to reach its goal. So,
+# you'll need to find the shortest path from any square at elevation a to the square marked E.
+# What is the fewest steps required to move starting from any square with elevation a to the location that should get
+# the best signal?
 
 def get_key_coords(value, input_map):
+    key_points = []
     for line in range(len(input_map)):
         position = input_map[line].find(value)
         if position >= 0:
-            return [line, position]
-    return None
+            key_points += [[line, position]]
+    return key_points
 
 
 def distances_map(initial_map, key_point):
@@ -57,14 +62,18 @@ def distances_map(initial_map, key_point):
     return final_map
 
 
-def get_path(data):
-    start = get_key_coords('S', data)
-    end = get_key_coords('E', data)
+def get_path(data, values):
     height_map = [[ord(x)-96 for x in line] for line in data]
-    height_map[start[0]][start[1]] = 1
+    end = get_key_coords('E', data)[0]
     height_map[end[0]][end[1]] = 26
+    start = []
+    for value in values:
+        local_coord = get_key_coords(value, data)
+        start += local_coord
+        if value == 'S':
+            height_map[local_coord[0][0]][local_coord[0][1]] = 1
     distances = distances_map(height_map, end)
-    return distances[start[0] + 1][start[1] + 1]
+    return min([distances[point[0] + 1][point[1] + 1] for point in start])
 
 
 def run(data_dir, star):
@@ -72,9 +81,9 @@ def run(data_dir, star):
         data = [x for x in fic.read().split('\n')[:-1]]
 
     if star == 1:  # The final answer is: 394
-        solution = get_path(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+        solution = get_path(data, ['S'])
+    elif star == 2:  # The final answer is: 388
+        solution = get_path(data, ['S', 'a'])
     else:
         raise Exception('Star number must be either 1 or 2.')
 
