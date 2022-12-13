@@ -129,3 +129,20 @@ Once you have the mapping, both exercises are easy to do.
 
 (*) Well, that means: him, Thomas Colcombet, and me + the ones who have read this page: 
 https://ufoot.org/liquidwar/v5/techinfo/algorithm
+
+### Day 13 - Distress Signal
+
+49 years old and still afraid by recursivity. It took me so many years to understand that you first define the stop
+condition! But OK, let's go. At least, the parsing is easy in Python.
+
+Then I had to make some small changes becuase I compared lists and integers in some cases, even if I really tried to
+avoid this.
+
+And last but not least: when I parse the data, I remove the last item by default. **It is not a good idea when the
+separator is `\n\n` in place of `\n`.** Each time, I forget. Each time, my test passes and not my puzzle input.
+Shame on me.
+
+Finally: my program ran, the test was OK, but I didn't get the good answer. I think that it is because of this, in the
+instructions: _If the lists are the same length and no comparison makes a decision about the order, continue checking
+the next part of the input._. In my case, if the first list is empty, I say "OK", it is the smallest one. I forgot to
+check if the right one is empty too. And it is not so easy: I have to keep the right side of my packets for this...
