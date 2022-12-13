@@ -1,4 +1,4 @@
-# Day 13: title
+# Day 13: Distress Signal
 
 # First star: Your handheld device must still not be working properly; the packets from the distress signal got decoded
 # out of order. You'll need to re-order the list of received packets (your puzzle input) to decode the message.
