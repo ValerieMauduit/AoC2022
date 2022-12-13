@@ -159,6 +159,8 @@ for the second star it led me to a real performance problem. It wasn't such a de
 map. But needed to do it again from scratch. Obviously, at a moment I got an error... OK, done. The second star needs
 only concentration and precision.
 
+### Day 15: Beacon Exclusion Zone
+
 ### Day 20: Grove Positioning System
 
 My main problem was that I didn't deal well with the case when a number is higher than the length of the list. I had to
