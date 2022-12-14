@@ -14,13 +14,13 @@ def test_sets():
             'number': 1,
             'input': ['498,4 -> 498,6 -> 496,6', '503,4 -> 502,4 -> 502,9 -> 494,9'],
             'expected1': 24,
-            'expected2': []
+            'expected2': 93
         },
     ]
 
 
 def test_first_star(test_data, expected):
-    solution = day14.sand_pile_size(test_data)
+    solution = day14.sand_pile_size_lower_limit(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day14.my_func(test_data)
+    solution = day14.sand_pile_size_upper_limit(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
