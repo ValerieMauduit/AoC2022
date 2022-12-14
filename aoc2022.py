@@ -6,7 +6,6 @@ from all_days import (
     day13, day14, day20, day21, day23, day24
 )
 
-
 def main():
     parser = argparse.ArgumentParser(description="Advent of Code 2022")
     parser.add_argument("--day", type=int, help="Puzzle day")
