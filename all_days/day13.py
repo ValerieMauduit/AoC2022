@@ -21,32 +21,53 @@
 
 # Second star: description
 
-def compare_packets(left, right, space=''):
-    print(f'{space}{left} vs {right}')
+def compare_packets(left_head, right_head, space=''):
+    print(f'{space}{left_head} vs {right_head}')
     space += '  '
-    if type(left) == list:
-        if len(left) == 0:
-            print(f'{space}True')
-            return True
-        elif type(right) == list:  # left: list, right: list
-            if len(right) == 0:
-                print(f'{space}False')
-                return False
-            elif left[0] == right[0]:
-                return compare_packets(left[1:], right[1:], space)
+    if type(left_head) == list:
+        if type(right_head) == list:     # left: list, right: list
+            return 42
+        else:                       # left: list, right: number
+            return 42
+    else:
+        if type(right_head) == list:     # left: number, right: list
+            return 42
+        else:                       # left: number, right: number
+            if left_head == right_head:       # equality, goes to the next
+                return 42
             else:
-                return compare_packets(left[0], right[0], space)
-        else:                      # left: list, right: number
-            return compare_packets(left[0], right, space)
-    elif type(right) == list:      # left: number, right: list
-        if len(right) == 0:
-            print(f'{space}False')
-            return False
-        else:
-            return compare_packets(left, right[0], space)
-    else:                          # left: number, right: number
-        print(f'{space}{left < right}')
-        return left < right
+                return left_head < right_head
+
+
+
+
+
+
+
+    #     if len(left) == 0:
+    #         if type(right) == list:
+    #             if len(right) == 0:
+    #                 return 42 # TODO: dans ce cas, c'est certainement la suite qui me donnerait la réponse...
+    #             else:
+    #                 return True
+    #         else:
+    #             return True
+    #     elif type(right) == list:  # left: list, right: list
+    #         if len(right) == 0:
+    #             return False
+    #         elif left[0] == right[0]:
+    #             return compare_packets(left[1:], right[1:], space)
+    #         else:
+    #             return compare_packets(left[0], right[0], space)
+    #     else:                      # left: list, right: number
+    #         return compare_packets(left[0], right, space)
+    # elif type(right) == list:      # left: number, right: list
+    #     if len(right) == 0:
+    #         return False
+    #     else:
+    #         return compare_packets(left, right[0], space)
+    # else:                          # left: number, right: number
+    #     return left < right
 
 
 def compare_all_packets(packets):
