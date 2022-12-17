@@ -151,3 +151,15 @@ It took me so much time to deal with the equalities... Recursivity and my brain:
 
 For the second part, I simply decided to implement a merge sort algorithm because I discovered it not such long ago and
 I liked the idea. It was really easy for me.
+
+### Day 17 - Pyroclastic Flow
+
+I didn't want to start it early because I was still distressed by the problem of yesterday. When I started, I thought:
+oh, OK, my favorite game, a Tetris! I was pretty clean and so on, understood the topic. But it took me such a loooong
+time to:
+
+1. realize that I was checking the test data but with my puzzle input patter. The problem was that the position of the
+first two rocks was exactly the same with both of the inputs, and the third one seems to be "almost OK". actually, like
+a bug from me...
+2. realize that I didn't raise an error if the input jet wasn't > or <. And I let the last `\n` in the list of the
+jets... It was much better when I removed it.

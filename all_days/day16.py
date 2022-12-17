@@ -27,14 +27,14 @@ class Valve:
         self.connections = []
         self.opened = 0
 
-    def add_connection(self, valve):
-        # for name in names:
-        #     if ~self.web.contains(name):
-        #         self.web.add_valve(Valve(name, None, self.web))
-        # self.connections = 42
-
-    def open_valve(self, time):
-        self.opened = time
+    # def add_connection(self, valve):
+    #     # for name in names:
+    #     #     if ~self.web.contains(name):
+    #     #         self.web.add_valve(Valve(name, None, self.web))
+    #     # self.connections = 42
+    #
+    # def open_valve(self, time):
+    #     self.opened = time
 
     def release_gas(self, end):
         if self.opened > 0:
