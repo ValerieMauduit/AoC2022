@@ -15,27 +15,37 @@
 # Using your scan, simulate the falling sand. How many units of sand come to rest before sand starts flowing into the
 # abyss below?
 
-# Second star: description
+# Second star: You realize you misread the scan. There isn't an endless void at the bottom of the scan - there's floor,
+# and you're standing on it! You don't have time to scan the floor, so assume the floor is an infinite horizontal line
+# with a y coordinate equal to two plus the highest y coordinate of any point in your scan. Using your scan, simulate
+# the falling sand until the source of the sand becomes blocked. How many units of sand come to rest?
 
-def rock_paths(data):
-    rock_map = []
-    for path in data:
-        corners = [[int(y[0]), int(y[1])] for y in [x.split(',') for x in path.split(' -> ')]]
-        for n in range(1, len(corners)):
-            xmin = min([corners[n - 1][0], corners[n][0]])
-            xmax = max([corners[n - 1][0], corners[n][0]])
-            ymin = min([corners[n - 1][1], corners[n][1]])
-            ymax = max([corners[n - 1][1], corners[n][1]])
-            # I duplicate thne corners. Is it a problem?
-            rock_map += [[x, y] for x in range(xmin, xmax + 1) for y in range(ymin, ymax + 1)]
-    return rock_map
+def build_rock_map(data, border=10):
+    paths = [[[int(y[0]), int(y[1])] for y in [x.split(',') for x in path.split(' -> ')]] for path in data]
+    x_origin = min([item[0] for sublist in paths for item in sublist]) - 1
+    lowest_rock = max([item[1] for sublist in paths for item in sublist])
+    rock_map = [
+        ['.' for x in range(x_origin, max([item[0] for sublist in paths for item in sublist]) + 2 * border)]
+        for y in range(lowest_rock + 2)
+    ]
+    rocks = []
+    for path in paths:
+        for n in range(1, len(path)):
+            x_min = min([path[n - 1][0], path[n][0]])
+            x_max = max([path[n - 1][0], path[n][0]])
+            y_min = min([path[n - 1][1], path[n][1]])
+            y_max = max([path[n - 1][1], path[n][1]])
+            rocks += [[x, y] for x in range(x_min, x_max + 1) for y in range(y_min, y_max + 1)]
+    for rock in rocks:
+        rock_map[rock[1]][rock[0] - x_origin + border] = '#'
+    return {'map': rock_map, 'x_origin': x_origin, 'lowest_rock': lowest_rock}
 
 
 def drop_grain(blocked_map, deepest_value, origin):
     if origin[1] < deepest_value:
-        if [origin[0], origin[1] + 1] in blocked_map:
-            if [origin[0] - 1, origin[1] + 1] in blocked_map:
-                if [origin[0] + 1, origin[1] + 1] in blocked_map:
+        if blocked_map[origin[1] + 1][origin[0]] != '.':
+            if blocked_map[origin[1] + 1][origin[0] - 1] != '.':
+                if blocked_map[origin[1] + 1][origin[0] + 1] != '.':
                     return origin
                 else:
                     return drop_grain(blocked_map, deepest_value, [origin[0] + 1, origin[1] + 1])
@@ -48,16 +58,39 @@ def drop_grain(blocked_map, deepest_value, origin):
 
 
 def sand_pile_size(data):
-    rock_map = rock_paths(data)
-    sand_origin = [500, 0]
+    border = 10
+    rock_map_data = build_rock_map(data, border)
+    rock_map = rock_map_data['map']
+    x_min = rock_map_data['x_origin']
+    sand_origin = [500 - x_min + border, 0]
     sand_grain = sand_origin
-    sand_pile = []
-    lowest_rock = max([rock[1] for rock in rock_map])
-    print(lowest_rock)
-    while sand_grain[1] <= lowest_rock:
-        sand_grain = drop_grain(rock_map + sand_pile, lowest_rock + 2, sand_origin)
-        sand_pile += [sand_grain]
-    return len(sand_pile) - 1
+    lowest_rock = rock_map_data['lowest_rock']
+    sand_pile = 0
+    while sand_grain[1] < lowest_rock:
+        sand_grain = drop_grain(rock_map, lowest_rock, sand_origin)
+        rock_map[sand_grain[1]][sand_grain[0]] = 'S'
+        sand_pile += 1
+    return sand_pile - 1
+
+
+def sand_pile_to_the_ground(data):
+    border = 10
+    rock_map_data = build_rock_map(data, border)
+    rock_map = rock_map_data['map']
+    x_min = rock_map_data['x_origin']
+    sand_origin = [500 - x_min + border, 0]
+    sand_grain = sand_origin
+    lowest_rock = rock_map_data['lowest_rock']
+    sand_pile = 0
+    while sand_grain != sand_origin:
+        # TODO: faire en sorte qu'il n'y ai pas de problème quand on est au bord de la map: juste on rajoute pas le
+        #  sable et c'est tout
+        sand_grain = drop_grain(rock_map, lowest_rock + 3, sand_origin)
+        rock_map[sand_grain[1]][sand_grain[0]] = 'S'
+        sand_pile += 1
+    # TODO: maintenant je cherche la profondeur minimum où j'ai du sable en bord de map (gauche et droite) et comme ça
+    #  je peux ajouter les grains que je n'ai pas fait tomber (n (n+1) / 2 * 2)
+    return sand_pile - 1
 
 
 def run(data_dir, star):
