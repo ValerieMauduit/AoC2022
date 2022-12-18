@@ -148,3 +148,6 @@ the next part of the input._. In my case, if the first list is empty, I say "OK"
 check if the right one is empty too. And it is not so easy: I have to keep the right side of my packets for this...
 
 It took me so much time to deal with the equalities... Recursivity and my brain: not best friends.
+
+For the second part, I simply decided to implement a merge sort algorithm because I discovered it not such long ago and
+I liked the idea. It was really easy for me.

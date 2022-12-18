@@ -19,7 +19,14 @@
 #   containing 2); the result is then found by instead comparing [0,0,0] and [2].
 # Determine which pairs of packets are already in the right order. What is the sum of the indices of those pairs?
 
-# Second star: description
+# Second star: Now, you just need to put all of the packets in the right order. Disregard the blank lines in your list
+# of received packets.
+# The distress signal protocol also requires that you include two additional divider packets: [[2]] and [[6]].
+# Using the same rules as before, organize all packets - the ones in your list of received packets as well as the two
+# divider packets - into the correct order.
+# Afterward, locate the divider packets. To find the decoder key for this distress signal, you need to determine the
+# indices of the two divider packets and multiply them together.
+# Organize all of the packets into the correct order. What is the decoder key for the distress signal?
 
 def compare_packets(left, right):
     if type(left) == list:                                  # [?] - ?
@@ -72,6 +79,36 @@ def compare_all_packets(packets):
     return [true_packets, sum(true_packets)]
 
 
+def merge_packets(left, right):
+    result = []
+    while (len(left) > 0) & (len(right) > 0):
+        if compare_packets(left[0], right[0]) == 'right':
+            result += [left[0]]
+            left = left[1:]
+        else:
+            result += [right[0]]
+            right = right[1:]
+    result += left + right
+    return result
+
+
+def sort_packets(packets):
+    length = len(packets)
+    if length <= 1:
+        return packets
+    else:
+        left = sort_packets(packets[:int(length / 2)])
+        right = sort_packets(packets[int(length / 2):])
+        return merge_packets(left, right)
+
+
+def order_all_packets(packets, dividers=[[[2]], [[6]]]):
+    sorted_packets = sort_packets([item for sublist in packets for item in sublist] + dividers)
+    div1 = sorted_packets.index(dividers[0]) + 1
+    div2 = sorted_packets.index(dividers[1]) + 1
+    return [[div1, div2], div1 * div2]
+
+
 def run(data_dir, star):
     with open(f'{data_dir}/input-day13.txt', 'r') as fic:
         data = [x for x in fic.read().split('\n\n')]
@@ -79,8 +116,8 @@ def run(data_dir, star):
 
     if star == 1:  # The final answer is: 4821
         solution = compare_all_packets(packets)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 21890
+        solution = order_all_packets(packets)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
