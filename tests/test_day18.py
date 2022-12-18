@@ -17,7 +17,7 @@ def test_sets():
                 [1, 2, 5], [3, 2, 5], [2, 1, 5], [2, 3, 5]
             ],
             'expected1': 64,
-            'expected2': [[3, 2, 5], 58]
+            'expected2': [[[2, 2, 5]], 58]
         },
     ]
 
@@ -32,7 +32,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day18.my_func(test_data)
+    solution = day18.get_external_surface(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
