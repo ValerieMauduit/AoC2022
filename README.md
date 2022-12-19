@@ -151,3 +151,5 @@ It took me so much time to deal with the equalities... Recursivity and my brain:
 
 For the second part, I simply decided to implement a merge sort algorithm because I discovered it not such long ago and
 I liked the idea. It was really easy for me.
+
+### Day 19 - 
