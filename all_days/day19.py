@@ -116,29 +116,42 @@ BLUEPRINTS = [
 ]
 
 
-def get_geodes(blueprint, time, robots_pack, reserve=None, space=''):
-    space += '  '
-    if reserve is None:
-        reserve = {'ore': 0, 'clay': 0, 'obs': 0, 'geo': 0}
-    if time == 24:
-        print(f"{space}Times up. Geodes: {reserve['geo']}")
-        return reserve['geo']
-    print(f"{space}Time: {time}")
-    print(f"{space}My robots are: {robots_pack}")
-    print(f"{space}My reserve is: {reserve}")
-    # Are you able to build some robots?
-    # TODO: list of new possible robots
-    possible_robots = [{'ore_robot': 0, 'clay_robot': 1, 'obs_robot': 0, 'geo_robot': 0}]
-    possible_robots = []
+def get_geodes(blueprint):
+    reserve = {'ore': 0, 'clay': 0, 'obs': 0, 'geo': 0}
+    robots_ready = {'ore_robot': 0, 'clay_robot': 0, 'obs_robot': 0, 'geo_robot': 0}
+    for time in range(25):
+        print(f"Time: {time}")
+        print(f"My robots are: {robots_ready}")
+        print(f"My reserve is: {reserve}")
+        # Find the best robots to create
+        new_robots = {'ore_robot': 0, 'clay_robot': 0, 'obs_robot': 0, 'geo_robot': 0}
+        # How many geo_robots to make?
+        new_geo_robots = min([reserve[product] // blueprint['geo_robot'][product] for product in ['obs', 'ore']])
+        new_robots['geo_robot'] += new_geo_robots
+        reserve['obs'] -= new_geo_robots * blueprint['geo_robot']['obs']
+        reserve['ore'] -= new_geo_robots * blueprint['geo_robot']['ore']
+        # How many obs_robots to make?
+        new_obs_robots = max([min(
+            # possible to create
+            [reserve[product] // blueprint['obs_robot'][product] for product in ['clay', 'ore']] +
+            # interesting for the geo_robots
+            [reserve['ore'] // blueprint['geo_robot']['ore'] * blueprint['geo_robot']['obs'] - reserve['obs']]
+        ), 0])
+        new_robots['obs_robot'] += new_obs_robots
+        reserve['clay'] -= new_obs_robots * blueprint['obs_robot']['clay']
+        reserve['ore'] -= new_obs_robots * blueprint['obs_robot']['ore']
 
 
-    for n in range(len(possible_robots)):
-        for robot in possible_robots[n]:
-            possible_robots[n][robot] += robots_pack[robot]
-    # The robots collect their products
-    for robot in robots_pack:
-        reserve[robot.split('_')[0]] += robots_pack[robot]
-    return max([geodes for robots in possible_robots for geodes in get_geodes(blueprint, time + 1, robots, reserve)])
+
+
+        # est-ce que j'ai + besoin d'obs que d'ore pour faire des goe robots? faire le maxi de obs-rob nécessaire (dans la limite de ce que je peux faire)
+        # même chose avec clay pour obs robot
+        # compléter avec des ore robots
+        # The robots collect their products
+        for robot in robots_ready:
+            reserve[robot.split('_')[0]] += robots_ready[robot]
+        robots_ready = {robot: robots_ready[robot] + new_robots[robot] for robot in robots_ready}
+    return reserve['geo']
 
 
 def quality_level(data):
