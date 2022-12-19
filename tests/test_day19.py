@@ -12,8 +12,18 @@ def test_sets():
     return [
         {
             'number': 1,
-            'input': [],
-            'expected1': [],
+            'input': [
+                {
+                    'id': 1,
+                    'ore_robot': {'ore': 4}, 'clay_robot': {'ore': 2}, 'obs_robot': {'ore': 3, 'clay': 14},
+                    'geo_robot': {'ore': 2, 'obs': 7}
+                },
+                {
+                    'id': 2, 'ore_robot': {'ore': 2}, 'clay_robot': {'ore': 3}, 'obs_robot': {'ore': 3, 'clay': 8},
+                 'geo_robot': {'ore': 3, 'obs': 8}
+                },
+            ],
+            'expected1': [{1: 9, 2: 12}, 33],
             'expected2': []
         },
     ]
