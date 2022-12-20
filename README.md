@@ -152,7 +152,14 @@ It took me so much time to deal with the equalities... Recursivity and my brain:
 For the second part, I simply decided to implement a merge sort algorithm because I discovered it not such long ago and
 I liked the idea. It was really easy for me.
 
-### Day21: Monkey Math
+### Day 20: Grove Positioning System
+
+My main problem was that I didn't deal welll with the case when a number is higher than the length of the list. I had to
+add another test, that I did manually on a sheet of paper. And then: I returned the good list, but the last digit on the
+first place. It is totally OK, but as I also checked the complete list in my test, I had to figure out it... And to
+change the expected value.
+
+### Day 21: Monkey Math
 
 First star: Always problems with recursivity. This time, I forgot to return something in the case I am not in the stop
 condition. Once I did it, it was easy.
