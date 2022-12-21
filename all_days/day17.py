@@ -22,6 +22,13 @@
 
 # Second star: description
 
+# TODO partie 2: il faut que je regarde tous les 1026 (longueur de mon jet pattern, à vérifier) l'abcisse de chacune des
+#  5 premières pierres + leur forme. Dès que je retrouve le même pattern, c'est que j'ai atteint le cycle.
+#  Reste à savoir:
+#  - ce que j'avais avant,
+#  - de combien les cycles se superposent, (ou peut-être pas, si avoir le nb de lignes ajoutées est + simple)
+#  - faire tomber ce qui manque
+
 ROCKS = [
     {'coord': [[0, 0], [0, 1], [0, 2], [0, 3]], 'l': 4, 'h': 1},
     {'coord': [[0, 1], [1, 0], [1, 1], [1, 2], [2, 1]], 'l': 3, 'h': 3},
@@ -72,11 +79,9 @@ def drop_rock(rock, already_fallen, width, jet_pattern):
 def drop_rocks(width, jet_pattern, drops=2022):
     chamber = []
     rocks_count = len(ROCKS)
-    jets_count = len(jet_pattern)
     for drop in range(drops):
         if drop % 10000 == 0:
             print(drop)
-        # input('   ==== next rock ===')
         dropped = drop_rock(ROCKS[drop % rocks_count], chamber, width, jet_pattern)
         chamber = dropped['chamber']
         jet_pattern = dropped['next_pattern']
