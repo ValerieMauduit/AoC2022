@@ -12,9 +12,9 @@ def test_sets():
     return [
         {
             'number': 0,
-            'input': ['root: pppw + sjmn', 'pppw: 12','sjmn: 42'],
+            'input': ['root: humn + pppw', 'pppw: 12','humn: 42'],
             'expected1': 54,
-            'expected2': []
+            'expected2': 12
         },
         {
             'number': 1,
@@ -24,13 +24,14 @@ def test_sets():
                 'lgvd: ljgn * ptdq', 'drzm: hmdt - zczc', 'hmdt: 32'
             ],
             'expected1': 152,
-            'expected2': []
+            'expected2': 301
         },
     ]
 
 
 def test_first_star(test_data, expected):
     solution = day21.answer_monkeys_riddle(test_data)
+    print(solution)
     if solution != expected:
         print("Your output is:")
         print(solution)
@@ -39,7 +40,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day21.my_func(test_data)
+    solution = day21.answer_monkeys_riddle_fixed(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)

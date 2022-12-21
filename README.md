@@ -156,3 +156,7 @@ I liked the idea. It was really easy for me.
 
 First star: Always problems with recursivity. This time, I forgot to return something in the case I am not in the stop
 condition. Once I did it, it was easy.
+
+Second star: I thought a short time about recursivity. But in the end it was fun to "inverse the monkeys". I took a
+facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
+corresponding monkey-human operation.
