@@ -3,9 +3,8 @@ import argparse
 
 from all_days import (
     day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12,
-    day13, day20, day21
+    day13, day14, day15, day20, day21
 )
-
 
 def main():
     parser = argparse.ArgumentParser(description="Advent of Code 2022")
@@ -40,6 +39,10 @@ def main():
         day12.run(args.dir, args.star)
     elif args.day == 13:
         day13.run(args.dir, args.star)
+    elif args.day == 14:
+        day14.run(args.dir, args.star)
+    elif args.day == 15:
+        day15.run(args.dir, args.star)
     elif args.day == 20:
         day20.run(args.dir, args.star)
     elif args.day == 21:

@@ -18,7 +18,7 @@
 #   then retry the comparison. For example, if comparing [0,0,0] and 2, convert the right value to [2] (a list
 #   containing 2); the result is then found by instead comparing [0,0,0] and [2].
 # Determine which pairs of packets are already in the right order. What is the sum of the indices of those pairs?
-
+#
 # Second star: Now, you just need to put all of the packets in the right order. Disregard the blank lines in your list
 # of received packets.
 # The distress signal protocol also requires that you include two additional divider packets: [[2]] and [[6]].
