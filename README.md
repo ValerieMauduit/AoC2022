@@ -154,10 +154,13 @@ I liked the idea. It was really easy for me.
 
 ### Day 20: Grove Positioning System
 
-My main problem was that I didn't deal welll with the case when a number is higher than the length of the list. I had to
+My main problem was that I didn't deal well with the case when a number is higher than the length of the list. I had to
 add another test, that I did manually on a sheet of paper. And then: I returned the good list, but the last digit on the
 first place. It is totally OK, but as I also checked the complete list in my test, I had to figure out it... And to
 change the expected value.
+
+Concerning the second star, as I used congruences from the beginning, I had no difficulty. I only needed to ensure that
+I didn't recalculate the position of each number before mixing the list again.
 
 ### Day 21: Monkey Math
 

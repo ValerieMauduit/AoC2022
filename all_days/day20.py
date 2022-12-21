@@ -15,10 +15,9 @@
 
 # Second star: description
 
-def mix(data):
-    length = len(data)
-    typed_data = [[data[n], n] for n in range(length)]
-    for n in range(len(data)):
+def mix(typed_data):
+    length = len(typed_data)
+    for n in range(len(typed_data)):
         item = [x for x in typed_data if x[1] == n][0]
         old_position = typed_data.index(item)
         number = item[0]
@@ -37,12 +36,16 @@ def mix(data):
                     typed_data[:new_position] + [item] + typed_data[new_position:old_position]
                     + typed_data[(old_position + 1):]
             )
-    return [x[0] for x in typed_data]
+    return typed_data
 
 
-def grove_coordinates(data):
-    mixed_data = mix(data)
-    length = len(mixed_data)
+def grove_coordinates(data, encryption=1, rounds = 1):
+    data = [x * encryption for x in data]
+    length = len(data)
+    typed_data = [[data[n], n] for n in range(length)]
+    for n in range(rounds):
+        typed_data = mix(typed_data)
+    mixed_data = [x[0] for x in typed_data]
     position_zero = mixed_data.index(0)
     three_coordinates = [
         mixed_data[(1000 % length + position_zero) % length],
@@ -58,8 +61,8 @@ def run(data_dir, star):
 
     if star == 1:  # The final answer is: 13522
         solution = grove_coordinates(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 17113168880158
+        solution = grove_coordinates(data, 811589153, 10)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
