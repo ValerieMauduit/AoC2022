@@ -38,6 +38,8 @@ def main():
         day11.run(args.dir, args.star)
     elif args.day == 12:
         day12.run(args.dir, args.star)
+    elif args.day == 13:
+        day13.run(args.dir, args.star)
     elif args.day == 21:
         day21.run(args.dir, args.star)
     else:
