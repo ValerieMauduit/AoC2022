@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day14.my_func(test_data)
+    solution = day14.sand_pile_to_the_ground(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)

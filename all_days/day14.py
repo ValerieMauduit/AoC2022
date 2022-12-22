@@ -44,13 +44,19 @@ def build_rock_map(data, border=10):
 def drop_grain(blocked_map, deepest_value, origin):
     if origin[1] < deepest_value:
         if blocked_map[origin[1] + 1][origin[0]] != '.':
-            if blocked_map[origin[1] + 1][origin[0] - 1] != '.':
-                if blocked_map[origin[1] + 1][origin[0] + 1] != '.':
-                    return origin
+            if origin[0] > 0:
+                if blocked_map[origin[1] + 1][origin[0] - 1] != '.':
+                    if origin[0] < len(blocked_map[0]) - 1:
+                        if blocked_map[origin[1] + 1][origin[0] + 1] != '.':
+                            return origin
+                        else:
+                            return drop_grain(blocked_map, deepest_value, [origin[0] + 1, origin[1] + 1])
+                    else:
+                        return origin
                 else:
-                    return drop_grain(blocked_map, deepest_value, [origin[0] + 1, origin[1] + 1])
+                    return drop_grain(blocked_map, deepest_value, [origin[0] - 1, origin[1] + 1])
             else:
-                return drop_grain(blocked_map, deepest_value, [origin[0] - 1, origin[1] + 1])
+                return origin
         else:
             return drop_grain(blocked_map, deepest_value, [origin[0], origin[1] + 1])
     else:
@@ -74,23 +80,33 @@ def sand_pile_size(data):
 
 
 def sand_pile_to_the_ground(data):
-    border = 10
+    border = 5
     rock_map_data = build_rock_map(data, border)
     rock_map = rock_map_data['map']
     x_min = rock_map_data['x_origin']
     sand_origin = [500 - x_min + border, 0]
-    sand_grain = sand_origin
+    sand_grain = [42, 42]
     lowest_rock = rock_map_data['lowest_rock']
     sand_pile = 0
     while sand_grain != sand_origin:
-        # TODO: faire en sorte qu'il n'y ai pas de problème quand on est au bord de la map: juste on rajoute pas le
-        #  sable et c'est tout
-        sand_grain = drop_grain(rock_map, lowest_rock + 3, sand_origin)
+        sand_grain = drop_grain(rock_map, lowest_rock + 1, sand_origin)
         rock_map[sand_grain[1]][sand_grain[0]] = 'S'
         sand_pile += 1
-    # TODO: maintenant je cherche la profondeur minimum où j'ai du sable en bord de map (gauche et droite) et comme ça
-    #  je peux ajouter les grains que je n'ai pas fait tomber (n (n+1) / 2 * 2)
-    return sand_pile - 1
+    # right triangle
+    right_side = [x[-1] for x in rock_map]
+    if 'S' in right_side:
+        height = lowest_rock + 1 - right_side.index('S')
+    else:
+        height = 0
+    right_triangle = height * (height + 1) / 2
+    # left triangle
+    left_side = [x[0] for x in rock_map]
+    if 'S' in left_side:
+        height = lowest_rock + 1 - left_side.index('S')
+    else:
+        height = 0
+    left_triangle = height * (height + 1) / 2
+    return sand_pile + right_triangle + left_triangle
 
 
 def run(data_dir, star):
@@ -99,8 +115,8 @@ def run(data_dir, star):
 
     if star == 1:  # The final answer is: 979
         solution = sand_pile_size(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 29044
+        solution = sand_pile_to_the_ground(data)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
