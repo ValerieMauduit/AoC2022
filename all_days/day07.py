@@ -38,7 +38,6 @@ class Directory:
         directory.files = self.files
         return directory
 
-
     def move_to(self, name):
         if name == '..':
             if self.parentDir is None:

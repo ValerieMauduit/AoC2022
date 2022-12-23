@@ -171,6 +171,16 @@ Second star: I thought a short time about recursivity. But in the end it was fun
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
 
+### Day 23: Unstable Diffusion
+
+Once I decided to describe the problem correctly in two classes, it was pretty straightforward to do the part 1.
+Problems:
+
+- the elves depend on the map and the map depends on the elves. Must be cautious on it (when I move an elf, I move its 
+  elves map at the same time).
+- Also: never forget to add 1 in a range to get the last value.
+- to round the orientations, I decided to create a sequence of directions for each first direction. The easiest way.
+
 ### Day 24: Blizzard Basin
 
 Talking with Christian, I realized that the map was deterministic, so actually, it is just a travel in a 3D map with
