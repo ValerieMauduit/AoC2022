@@ -176,3 +176,6 @@ corresponding monkey-human operation.
 Talking with Christian, I realized that the map was deterministic, so actually, it is just a travel in a 3D map with
 some limitations (you can't go to the Z-) So my idea is that I will map the 3D map and count like in day 12 the lengths
 of the possible paths. Let's see.
+
+Actually, I was able to do it easily. Only one point: Christian told me that I could have to wait before entering the
+blizzards. It helped me to forecast this case from the beginning.

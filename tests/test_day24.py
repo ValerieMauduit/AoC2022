@@ -14,7 +14,7 @@ def test_sets():
             'number': 1,
             'input': ['#.######', '#>>.<^<#', '#.<..<<#', '#>v.><>#', '#<^v^^>#', '######.#'],
             'expected1': 18,
-            'expected2': []
+            'expected2': 54
         },
     ]
 
@@ -29,7 +29,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day24.my_func(test_data)
+    solution = day24.reach_exit_time(test_data, True)
     if solution != expected:
         print("Your output is:")
         print(solution)

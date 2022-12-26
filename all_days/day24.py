@@ -12,7 +12,12 @@
 # in place. You and the blizzards act simultaneously, and you cannot share a position with a blizzard.
 # What is the fewest number of minutes required to avoid the blizzards and reach the goal?
 
-# Second star: description
+# Second star: As the expedition reaches the far side of the valley, one of the Elves looks especially dismayed:
+# He forgot his snacks at the entrance to the valley!
+# Since you're so good at dodging blizzards, the Elves humbly request that you go back for his snacks. From the same
+# initial conditions, how quickly can you make it from the start to the goal, then back to the start, then back to the
+# goal?
+# What is the fewest number of minutes required to reach the goal, go back to the start, then reach the goal again?
 
 def get_blizzard_rules(blizzard_map, width, height):
     rules = {'>': [], '<': [], '^': [], 'v': []}
@@ -36,7 +41,9 @@ def build_blizzard_map(rules, width, height, time):
     return actual_map
 
 
-def one_more_step(map_step_before, blizzard_map, width, height):
+def one_more_step(map_step_before, blizzard_map, width, height, entrance=None):
+    if entrance is None:
+        entrance = [0, 0]
     new_map = [[0 for x in range(width)] for y in range(height)]
     for y in range(height):
         for x in range(width):
@@ -47,12 +54,12 @@ def one_more_step(map_step_before, blizzard_map, width, height):
                 for yn in range(max(0, y - 1), min(height - 1, y + 1) + 1):
                     if blizzard_map[yn][x] == '.':
                         new_map[yn][x] = 1
-    if blizzard_map[0][0] == '.':
-        new_map[0][0] = 1
+    if blizzard_map[entrance[0]][entrance[1]] == '.':
+        new_map[entrance[0]][entrance[1]] = 1
     return new_map
 
 
-def reach_exit_time(data):
+def reach_exit_time(data, take_snake=False):
     blizzard_map0 = [line[1:-1] for line in data[1:-1]]
     width = len(blizzard_map0[0])
     height = len(blizzard_map0)
@@ -62,6 +69,28 @@ def reach_exit_time(data):
     while travel_map[-1][-1] == 0:
         time += 1
         travel_map = one_more_step(travel_map, build_blizzard_map(blizzard_rules, width, height, time), width, height)
+    print(f'First travel: {time + 1}')
+    if take_snake:
+        time += 1
+        travel_map  = [[0 for x in line] for line in blizzard_map0]
+        while travel_map[0][0] == 0:
+            time += 1
+            travel_map = one_more_step(
+                travel_map,
+                build_blizzard_map(blizzard_rules, width, height, time),
+                width, height, [height - 1, width - 1]
+            )
+        print(f'Back to entrance: {time + 1}')
+        time += 1
+        travel_map = [[0 for x in line] for line in blizzard_map0]
+        while travel_map[-1][-1] == 0:
+            time += 1
+            travel_map = one_more_step(
+                travel_map,
+                build_blizzard_map(blizzard_rules, width, height, time),
+                width, height
+            )
+        print(f'End of the travel: {time + 1}')
     return time + 1
 
 
@@ -71,8 +100,8 @@ def run(data_dir, star):
 
     if star == 1:  # The final answer is: 230
         solution = reach_exit_time(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 713
+        solution = reach_exit_time(data, True)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
