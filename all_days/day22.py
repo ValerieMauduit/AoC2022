@@ -25,9 +25,6 @@
 
 # Second star: description
 
-# TODO: regarder les print du cas réel et faire plein de tests avec une ligne à chaque fois pour comprendre ce qui a
-#  l'air de se passer.
-
 import re
 
 TURN_COUNT = {'R': 0, 'D': 1, 'L': 2, 'U': 3}
@@ -35,75 +32,115 @@ TURN = {'R': {'R': 'D', 'D': 'L', 'L': 'U', 'U': 'R'}, 'L': {'R': 'U', 'D': 'R',
 MARKERS = {'R': '>', 'D': 'v', 'L': '<', 'U': '^'}
 
 
-def move_n_steps(position, distance, map_line, reverse=False):
-    map_width = len([x for x in map_line if x != ' '])
-    sign = 1
-    if '#' in map_line:
-        print('  wall in line')
-        reordered_line = [x for x in (map_line[position:] + map_line[:position]) if x != ' ']
-        if reverse:
-            reordered_line.reverse()
-            if position == 0:
-                reordered_line = [reordered_line[-1]] + reordered_line[:-1]
-            sign = -1
-        print(f"  distance: {distance} vs 1er mur: {reordered_line.index('#') - 1}")
-        displacement = min([distance, reordered_line.index('#') - 1])
-    else:
-        print('  free line')
-        displacement = distance
-        if reverse:
-            sign = -1
-    blanks = re.search('\.|#', ''.join(map_line)).span()[0]
-    print(f" map_width: {map_width}")
-    print(f" displacement: {displacement}") # TODO: faux 0, je devrais avoir 1
-    print(f" sign: {sign}")
-    print(f" position: {position}")
-    print(f" blanks: {blanks}") # TODO: faux 0, je devrais avoir 50
-    print(f" (map_width + displacement * sign + position - blanks): {(map_width + displacement * sign + position - blanks)}")
-    print(f" (map_width + displacement * sign + position - blanks) % map_width: {(map_width + displacement * sign + position - blanks) % map_width}")
-
-    return (map_width + displacement * sign + position - blanks) % map_width + blanks
+class MonkeyMap:
+    def __init__(self, data):
+        self.lines = [Line(definition) for definition in data]
+        self.height = len(data)
+        self.width = max([line.stop for line in self.lines])
+        self.columns = [
+            Line(definition)
+            for definition in [
+                ''.join([line[col] if col < len(line) else '' for line in data ])
+                for col in range(self.width)
+            ]
+        ]
 
 
-def go_ahead(position, distance, my_map):
-    orientation  = position[2]
-    if orientation == 'R':
-        position[0] = move_n_steps(position[0], distance, my_map[position[1]])
-    elif orientation == 'L':
-        position[0] = move_n_steps(position[0], distance, my_map[position[1]], True)
-    elif orientation == 'D':
-        position[1] = move_n_steps(position[1], distance, [line[position[0]] for line in my_map])
-    elif orientation == 'U':
-        position[1] = move_n_steps(position[1], distance, [line[position[0]] for line in my_map], True)
-    else:
-        raise Exception(f'WTF is this orientation??? ({orientation})')
-    return position
+class Line:
+    def __init__(self, definition):
+        line_in_list = [x for x in definition]
+        search_map = re.search('[\.#]+', definition)
+        self.start = search_map.start()
+        self.stop = search_map.end()
+        self.map = [x for x in line_in_list if x != ' ']
+        self.length = self.stop - self.start
 
 
-def travel_in_map(my_map, instructions):
-    position = [my_map[0].index('.'), 0, 'R']
-    for n in range(len(instructions['turns'])):
-        print(f'round {n}:')
-        print(f"go ahead {position}, {instructions['distances'][n]}:")
-        position = go_ahead(position, instructions['distances'][n], my_map)
-        print(f"turn {TURN[instructions['turns'][n]][position[2]]}")
-        position = [position[0], position[1], TURN[instructions['turns'][n]][position[2]]]
-        input('...')
-    print('last step')
-    print(f"go ahead {position}, {instructions['distances'][-1]}:")
-    position = go_ahead(position, instructions['distances'][-1], my_map)
-    return position
+class Santa:
+    def __init__(self, monkey_map):
+        self.monkey_map = monkey_map
+        self.y = 0
+        self.x = monkey_map.lines[0].start
+        self.orientation = 'R'
+
+    def row(self):
+        return self.monkey_map.lines[self.y]
+
+    def col(self):
+        return self.monkey_map.columns[self.x]
+
+    def move(self, distance):
+        if self.orientation == 'R':
+            local_x = self.x - self.row().start
+            print('  move R')
+            if '#' in self.row().map:
+                print('    wall in line')
+                wall = (self.row().map + self.row().map)[local_x:].index('#')
+                self.x = (local_x + min([distance, wall - 1])) % self.row().length + self.row().start
+            else:
+                print('    no wall in line')
+                self.x = (local_x + distance) % self.row().length + self.row().start
+        elif self.orientation == 'L':
+            local_x = self.x - self.row().start
+            print('  move L')
+            if '#' in self.row().map:
+                print('    wall in line')
+                tempo_line = [x for x in self.row().map + self.row().map]
+                tempo_line.reverse()
+                wall = tempo_line[(self.row().length - local_x - 1):].index('#')
+                self.x = (local_x - min([distance, wall - 1]) + self.row().length) % self.row().length + self.row().start
+            else:
+                print('    no wall in line')
+                self.x = (local_x + self.row().length - distance % self.row().length) % self.row().length + self.row().start
+        elif self.orientation == 'D':
+            print('  move D')
+            local_y = self.y - self.col().start
+            if '#' in self.col().map:
+                print('    wall in line')
+                wall = (self.col().map + self.col().map)[local_y:].index('#')
+                self.y = (local_y + min([distance, wall - 1])) % self.col().length + self.col().start
+            else:
+                print('    no wall in line')
+                self.y = (self.y + distance) % self.col().length + self.col().start
+        elif self.orientation == 'U':
+            local_y = self.y - self.col().start
+            print('  move U')
+            if '#' in self.col().map:
+                print('    wall in line')
+                tempo_col = [x for x in self.col().map + self.col().map]
+                tempo_col.reverse()
+                wall = tempo_col[(self.col().length - local_y - 1):].index('#')
+                self.y = (local_y - min([distance, wall - 1]) + self.col().length) % self.col().length + self.col().start
+            else:
+                print('    no wall in line')
+                self.y = (local_y + self.col().length - distance % self.col().length) % self.col().length + self.col().start
+        else:
+            raise Exception(f"WTF is this orientation? ({self.orientation})")
+
+    def turn(self, direction):
+        self.orientation = TURN[direction][self.orientation]
 
 
 def get_password(data):
-    max_width = max([len(line) for line in data[0]])
-    my_map = [[x for x in line] + [' ' for x in range(max_width - len(line) + 1)] for line in data[0]]
-    last_position = travel_in_map(
-        my_map,
-        {'distances': [int(x) for x in re.split('R|L', data[1])], 'turns': re.split('[0-9]+', data[1])[1:-1]}
-    )
-    last_position = [last_position[1] + 1, last_position[0] + 1, last_position[2]]
-    return [last_position, 1000 * last_position[0] + 4 * last_position[1] + TURN_COUNT[last_position[2]]]
+    monkey_map = MonkeyMap(data[0])
+    santa = Santa(monkey_map)
+    print(f"Initial position: {santa.x}, {santa.y}")
+    input('...')
+    distances = [int(x) for x in re.split('R|L', data[1])]
+    turns = re.split('[0-9]+', data[1])[1:-1]
+    # print(f'Instructions : {data[1]}')
+    for move in range(len(distances) - 1):
+        print(f'Move {distances[move]} in direction {santa.orientation}')
+        santa.move(distances[move])
+        santa.turn(turns[move])
+        print(f'Turn {turns[move]} to {santa.orientation}')
+        print(f"Position: {santa.x}, {santa.y}")
+        input('...')
+    santa.move(distances[-1])
+    line = santa.y + 1
+    column = santa.x + monkey_map.lines[line].start + 1
+    orientation = santa.orientation
+    return [[line, column, orientation], 1000 * line + 4 * column + TURN_COUNT[orientation]]
 
 
 def run(data_dir, star):
@@ -111,7 +148,7 @@ def run(data_dir, star):
         data = [x for x in fic.read().split('\n')[:-1]]
         data = [data[:data.index('')], data[-1]]
 
-    if star == 1:  # The final answer is: # TODO: 189192, too high - 18512 too low
+    if star == 1:  # The final answer is: # TODO: 189192, too high - 18512 too low - 76532 est faux
         solution = get_password(data)
     elif star == 2:  # The final answer is:
         solution = my_func(data)

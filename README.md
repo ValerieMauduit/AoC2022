@@ -171,6 +171,13 @@ Second star: I thought a short time about recursivity. But in the end it was fun
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
 
+### Day 22: Monkey Map
+
+It is not so easy to work with these congruences! First I went in some walls. After, it was better. But I have to count
+the blank lines or the blank columns and to go aroud a line or a column in a map "by blocks". I managed to run the 
+example but some corner cases didn't run, like the case were I am in the first position of a line and I need to go back
+to the last non blank one. I needed so real tests on only one line or only one column.
+
 ### Day 23: Unstable Diffusion
 
 Once I decided to describe the problem correctly in two classes, it was pretty straightforward to do the part 1.
