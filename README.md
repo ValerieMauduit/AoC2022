@@ -170,3 +170,9 @@ condition. Once I did it, it was easy.
 Second star: I thought a short time about recursivity. But in the end it was fun to "inverse the monkeys". I took a
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
+
+### Day 24: Blizzard Basin
+
+Talking with Christian, I realized that the map was deterministic, so actually, it is just a travel in a 3D map with
+some limitations (you can't go to the Z-) So my idea is that I will map the 3D map and count like in day 12 the lengths
+of the possible paths. Let's see.
