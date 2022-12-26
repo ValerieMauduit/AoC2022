@@ -181,6 +181,12 @@ Problems:
 - Also: never forget to add 1 in a range to get the last value.
 - to round the orientations, I decided to create a sequence of directions for each first direction. The easiest way.
 
+I had forecasted that the second step was to define the number of round to spread totally the elves. I decided to do it
+like a dumb, and it worked: I increased my margins around the map and then ran the moves until the elves don't want to
+change their places anymore. It was a little long (some seconds) but OK. I worried that my increased margins weren't
+enough. With only 100 extra borders, it was OK! And thanks to my elfes objects that are able to tell me at any moment if
+they want to move or not, it was really easy to define the stop condition.
+
 ### Day 24: Blizzard Basin
 
 Talking with Christian, I realized that the map was deterministic, so actually, it is just a travel in a 3D map with

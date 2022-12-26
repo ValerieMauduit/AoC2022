@@ -26,7 +26,8 @@
 # Simulate the Elves' process and find the smallest rectangle that contains the Elves after 10 rounds. How many empty
 # ground tiles does that rectangle contain?
 
-# Second star: description
+# Second star: It seems you're on the right track. Finish simulating the process and figure out where the Elves need to
+# go. How many rounds did you save them?
 
 ORIENTATIONS = {'N': 'NSWE', 'S': 'SWEN', 'W': 'WENS', 'E': 'ENSW'}
 
@@ -73,13 +74,16 @@ class ElvesMap:
                     elf.move(elf.next_position)
         self.elves_orientation = ORIENTATIONS[self.elves_orientation][1]
 
+    def elves_want_to_move(self):
+        return True in [elf.wants_to_move for elf in self.elves]
+
 
 class Elf:
     def __init__(self, x, y, elves_map):
         self.x = x
         self.y = y
         self.elves_map = elves_map
-        self.wants_to_move = False
+        self.wants_to_move = True
         self.next_position = None
 
     def look_around(self):
@@ -143,14 +147,25 @@ def smallest_space(data):
     return (max_x - min_x) * (max_y - min_y) - len(elves_map.elves)
 
 
+def spread_elves(data):
+    elves_map = ElvesMap(data, 100)
+    rounds = 0
+    while elves_map.elves_want_to_move():
+        rounds += 1
+        if rounds % 100 == 0:
+            print('=' * 42 + str(rounds) + '=' * 42)
+        elves_map.move_elves()
+    return rounds
+
+
 def run(data_dir, star):
     with open(f'{data_dir}/input-day23.txt', 'r') as fic:
         data = [x for x in fic.read().split('\n')[:-1]]
 
     if star == 1:  # The final answer is: 3762
         solution = smallest_space(data)
-    elif star == 2:  # The final answer is:
-        solution = my_func(data)
+    elif star == 2:  # The final answer is: 997
+        solution = spread_elves(data)
     else:
         raise Exception('Star number must be either 1 or 2.')
 

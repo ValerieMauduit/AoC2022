@@ -13,7 +13,8 @@ def test_sets():
         {
             'number': 1,
             'input': ['.....', '..##.', '..#..', '.....', '..##.', '.....'],
-            'expected1': 25
+            'expected1': 25,
+            'expected2': 4
         },
         {
             'number': 2,
@@ -22,7 +23,8 @@ def test_sets():
                 '....#...##....', '...#.###......', '...##.#.##....', '....#..#......', '..............',
                 '..............', '..............'
             ],
-            'expected1': 110
+            'expected1': 110,
+            'expected2': 20
         }
     ]
 
@@ -37,7 +39,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day23.my_func(test_data)
+    solution = day23.spread_elves(test_data)
     if solution != expected:
         print("Your output is:")
         print(solution)
