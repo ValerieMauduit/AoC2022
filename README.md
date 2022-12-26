@@ -170,3 +170,9 @@ condition. Once I did it, it was easy.
 Second star: I thought a short time about recursivity. But in the end it was fun to "inverse the monkeys". I took a
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
+
+### Day 25: Full of Hot Air
+
+Translating the snafu into a decimal number was easy. The translation from number to snafu seemed to be more difficult
+in the beginning. Then I realized that I had simply to encore in base 5, and a transalation from a base 5 number to a
+snafu number is easy.
