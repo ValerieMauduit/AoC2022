@@ -178,6 +178,22 @@ Second star: I thought a short time about recursivity. But in the end it was fun
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
 
+### Day 22: Monkey Map
+
+It is not so easy to work with these congruences! First I went in some walls. After, it was better. But I have to count
+the blank lines or the blank columns and to go aroud a line or a column in a map "by blocks". I managed to run the 
+example but some corner cases didn't run, like the case were I am in the first position of a line and I need to go back
+to the last non blank one. I needed so real tests on only one line or only one column.
+
+Actually: in the beginning I defined local coordinates (0 in a line is the first position in the line). But I realized
+that it was better to use global coordinates in the map and locally, during the calculation of the move, use local
+coordinates. It worked fine! BUT. I forgot to remove the transformation from local to global that I made to get the
+password. I spent so much time trying to understand a path bug, since my travel was perfect, I had just a small addition
+in my password calculation that provided an error on the final result. Hours spent on it.
+
+Second part: I knew from the beginning that the folding wasn't the same thn the example so I decided not to do the code
+for the test, and hard-code the cube shape for my input.
+
 ### Day 23: Unstable Diffusion
 
 Once I decided to describe the problem correctly in two classes, it was pretty straightforward to do the part 1.
