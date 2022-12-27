@@ -45,12 +45,38 @@ class MonkeyMap:
             ]
         ]
         self.drawing_map = [[x for x in definition] for definition in data]
+        self.faces = []
+        for x in range(0, 150, 50):
+            for y in range(0, 150, 50):
+                self.faces += [Face([[x for x in line[x:(x+50)]] for line in self.drawing_map[y:(y+50)]], x, y)]
+        self.faces[0].right = self.faces[4].lines
+        self.faces[0].up = self.faces[3].lines
+        self.faces[0].left = # TODO chiant de tout définir !
+
+
+class Face:
+    def __init__(self, definition, x, y):
+        self.x = x
+        self.y = y
+        self.lines = [Line(x) for x in definition]
+        self.columns = [Line(x) for x in [''.join([line[col] for line in definition]) for col in range(50)]]
+        self.reversed_lines = [Line(x, reversed=True) for x in definition]
+        self.reversed_columns = [
+            Line(x, reversed=True)
+            for x in [''.join([line[col] for line in definition]) for col in range(50)]
+        ]
+        self.right = None
+        self.left = None
+        self.up = None
+        self.down = None
 
 
 class Line:
-    def __init__(self, definition):
+    def __init__(self, definition, reversed=False):
         line_in_list = [x for x in definition]
-        search_map = re.search('[\.#]+', definition)
+        if reversed:
+            line_in_list.reverse()
+        search_map = re.search('[\.#]+', ''.join(line_in_list))
         self.start = search_map.start()
         self.stop = search_map.end()
         self.map = [x for x in line_in_list if x != ' ']
