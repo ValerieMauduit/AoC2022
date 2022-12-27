@@ -29,7 +29,7 @@ def test_sets():
                 'Sensor at x=20, y=1: closest beacon is at x=15, y=3'
             ],
             'expected1': 26,
-            'expected2': []
+            'expected2': [[14, 11], 56000011]
         },
     ]
 
@@ -44,7 +44,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day15.my_func(test_data)
+    solution = day15.tuning_frequency(test_data, 20)
     if solution != expected:
         print("Your output is:")
         print(solution)
