@@ -152,6 +152,13 @@ It took me so much time to deal with the equalities... Recursivity and my brain:
 For the second part, I simply decided to implement a merge sort algorithm because I discovered it not such long ago and
 I liked the idea. It was really easy for me.
 
+### Day 14: Regolith Reservoir
+
+No problem to do the first star. But I decided to define the rocks only but a list of their coordinates. It was OK, but
+for the second star it led me to a real performance problem. It wasn't such a deal to define the rocks in a matrix-like
+map. But needed to do it again from scratch. Obviously, at a moment I got an error... OK, done. The second star needs
+only concentration and precision.
+
 ### Day 20: Grove Positioning System
 
 My main problem was that I didn't deal well with the case when a number is higher than the length of the list. I had to
