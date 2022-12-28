@@ -22,7 +22,7 @@ I had to copy/update my 2019 setup (better than my 2020 one) and I really did th
 ### Day 2 - Rock Paper Scissors
 
 I hesitated: should I rename ABC and XYZ to rock-paper-scissor, to really understand what are the fight? 
-Should I at least remane XYZ to ABC?
+Should I at least rename XYZ to ABC?
 Finally, I decided to create a map saying for each letter which letter it beats, eith ABC and XYZ letters.
 
 ### Day 3 - Rucksack Reorganization
@@ -49,9 +49,9 @@ Actually, my answer was so short that I think that this problem wasn't for a Pyt
 
 ### Day 7 - No Space Left On Device
 
-Ouch, it hurted! I decided immediatly that I should be clean in my code: creating a Directory and a File class, methods
+Ouch, it hurted! I decided immediately that I should be clean in my code: creating a Directory and a File class, methods
 to navigate, to evaluate the sizes. I started it pretty well but it took so much time that I had to finish during the 
-next week-end.
+next weekend.
 
 My Directory class had attributes `parentDirectory` and `childrenDirectories` but it wasn't so clear at the begining 
 how I could navigate but keeping what I had already stored in my previous directory. 
@@ -159,6 +159,95 @@ for the second star it led me to a real performance problem. It wasn't such a de
 map. But needed to do it again from scratch. Obviously, at a moment I got an error... OK, done. The second star needs
 only concentration and precision.
 
+### Day 15: Beacon Exclusion Zone
+
+#### Not finished
+
+I parsed the easiest way: "OK, there are 8 splits if I split with the good pattern, and the beacon coordinates are the
+values 5 and 7 in the list". If you remove one space in a line, nothing works anymore. Not a strong parsing, but it's
+OK.
+
+Then I struggled with the intervals : is this value excluded or included? Always the same questions. First star was OK,
+then. But my code scans each line to count the intervals covered by the sensors. It ran for the second star but was way
+too long on my real input. So I decided to scan all the 4 millions raw map in one step and then use it to detect the
+first row with an empty cell. But I had to deal with negative + positive values, limits of the map... Long story short:
+I dropped because I spent too much time on this one and my previous (Day 22).
+
+### Day 16: Proboscidea Volcanium
+
+#### Not done at all
+
+We need a graph, my terror. I only started to define the valves and even this, I didn't finish, because fear of not
+managing the day anyway. My idea, if I had time: I have 30 minutes and 2 minutes at least by valve. I define all the
+combinations for 15 valves with a non-zero flow in the list. Then For each combination: 
+
+- first I calculate the shortest path to go to the first valve. I update the data. 
+- If the remaining time is not enough, I remove the last valves.
+- maybe for each combination, I calculate the best final flow if all the paths from valve to valve would be 1?
+- then I can, each step, check if some combinations of valves need to be removed. I think so, because if I start by the
+  more efficient valve as a first valve, I can prune many combinations really fast.
+
+I would use a DFS algorith I think, actually: depth search first: I try the first branch, and it will allow me to prune
+some branches during the process.
+
+### Day 17: Pyroclastic Flow
+
+#### Not finished
+
+A Tetris! My main problem in the first star was that I forgot a rock shape in my list of rocks. I had also to define a
+specific function to check if a rock wants to go I a place where all of its cells are free. Finally: never forget to
+raise an exception if a patter is not recognized: how many times did I use only a if...else but actually, I entered a
+third value because my parsing had a problem (like ready the last return character in the input file).
+
+Second star: I thought about it but it's a mess. I need to determine a cycle. But the cycle won't start from the step 0,
+as in the beginning, we are on a flat floor, but after 1064 steps (the length of the jets pattern), we don't start again
+on a flat floor. I imagine that there would be something at a moment and that if I keep the relative positions of the 5
+first drops in a series of jet pattern, it would be enough. But not totally sure. And then, after:
+
+- I have to calculate the height before the cycles
+- I have to calculate how many cycles
+- I have to calculate the overlap between two consecutive cycles
+- I have to calculate the last steps, from the end of a cycle (with its overlap)
+
+### Day 18: Boiling Boulders
+
+#### Not finished
+
+For the first part, I decide to add 6 faces each time I added a cube, and then remove 2 faces for each neighbour it
+glued with. It works fine.
+
+For the second part, I wanted first to determine, for each free cell, if there are no occupied cells in one direction
+from it, to the border. But it isn't true, you can have a path with is not linear. After thinking about the shape of the
+bubbles, my conclusion was that it is better to star from the outside: I build a large cube containing all the occupied
+cells and then I remove a cell from neighbour to neighbour if the cell is not occupied by a rock. So I won't remove the
+cells inside. It was my idea.
+
+But now I think that I would better add a water ceil for each neighbour if not occupied. And In the end, I calculate the
+surface of the water cells, and remove the surface of the outside cube. But maybe it is similar in terms of performance.
+I could also check which list of cells is the shortest.
+
+### Day 19: Not Enough Minerals
+
+#### Not done at all
+
+One more graph problem...
+
+First important think: it is always the same idea: the ore and the clay robots are built of ores, the obs robots are
+builds of ores + clay, the geode robots are built of ore + obs. It is important to notice: no change in this pattern,
+for any blueprint.
+
+My main idea is that what we really want are geode robots. So we would make:
+
+- as many geode robots as we can.
+- as many obs or ore robots to complete the left reserve after building the geode robots
+- as many obs + ore robots to build complete geode robots
+- once done: would I prefer to build more obs robots or more ore robots? Build the ones to complete a entire number of
+  obs robots pattern
+
+I am pretty sure that there is something deterministic, maybe with a range of freedom of +/- n in a "previous depth"
+robot. But I need to try and adjust. And I also know that all the people I know who managed to run their programs used
+heuristics and are not sure to have reached the best value, except the fact that the AoC accepted their answer.
+
 ### Day 20: Grove Positioning System
 
 My main problem was that I didn't deal well with the case when a number is higher than the length of the list. I had to
@@ -177,6 +266,24 @@ condition. Once I did it, it was easy.
 Second star: I thought a short time about recursivity. But in the end it was fun to "inverse the monkeys". I took a
 facility, nevertheless: I knew that the human, was the left part of an addition. I didn't test to create the
 corresponding monkey-human operation.
+
+### Day 22: Monkey Map
+
+#### Not finished
+
+First star: 
+
+First, I wanted to define the position with local coordinates. But actually, at each turn, I could get a mistake, and it
+was not easy to debug. So I went back to a global coordinates system. It was almost OK... I spent many hours on it,
+finally asked my husband to pass my input and give me the coordinates at each step. I had the same! 1 hour later... I
+let a subtraction to go from the global to the local coordinates when providing the result. I removed this subtraction
+(that removed 0 in the test sample, reason why I didn't see it) and it works. Holly sh***t.
+
+Second star:
+
+I have to define each "line" of the cube: wich part belongs to which face, in which direction. I think that it is
+possible. But I don't have the courage to go into it at the moment. And maybe... I should have kept my local
+coordinates...
 
 ### Day 23: Unstable Diffusion
 
@@ -202,3 +309,42 @@ of the possible paths. Let's see.
 
 Actually, I was able to do it easily. Only one point: Christian told me that I could have to wait before entering the
 blizzards. It helped me to forecast this case from the beginning.
+
+The second star was exactly the same thing, totally no problem with my algorithm.
+
+### Day 25: Full of Hot Air
+
+Decode the snafu was easy for me. Encode it again gave me more trouble. Finally, I decided to encore in base 5 first,
+and then read it from right to left, using kind of carried number for the 3, 4, and 5 (due to a previous carried
+number).
+
+And then, obviously, the second star is still blocked because I didn't finish the rest.
+
+## Summary
+
+I am a little frustrated to stop. I feel like the 2019 AoC: I had just finished, in time, all the 2020 one, so I decided
+to do it after. But I kept blocked on one day and I dropped. Here, same feeling: even if I could finish some other
+stars:
+
+- I am pretty sure that some will still resist
+- I will spend all my holiday week on it
+
+What went well: 
+- my test driven development. Not perfect, I will prepare something better for next year, with less
+rigidity. But it was still nice to have it.
+- speaking with my husband. We had different ideas. Speaking helped us to write our code with many good tips.
+- Ladies of Code leaderboard, with ladies participating. Because we weren't only Paola and me competing like in 2020,
+  but also other ladies continue day after day (not enough). It is nice to be together on the same game during a month.
+
+What went wrong:
+
+- I need to have some hand-made functions to deal with 2D maps. Some that I perfectly know and that I can append in 
+  case of necessity.
+- I need to have some way, already written, to deal with graphs! And maybe this story of Depth Search First.
+- my husband doing the AoC with a mechanical keyboard. I was way too stressed because of it. I mustn't be in this kind
+  of competition mode! Is it so important to enjoy doing it. (Precision: it is *my* fault, not my husband's. It is OK
+  for him to have a mechanical keyboard and to use it.)
+- I was too slow to enjoy the reddit feed https://www.reddit.com/r/adventofcode/ because I really prefer to go on it
+  when I have finished the exercises of the day.
+
+My idea: do, quietly, the 2021 during the year, to prepare the 2023 with a good tooling.
