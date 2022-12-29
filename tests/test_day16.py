@@ -25,7 +25,7 @@ def test_sets():
                 'Valve JJ has flow rate=21; tunnel leads to valve II'
             ],
             'expected1': 1651,
-            'expected2': []
+            'expected2': 1707
         },
     ]
 
@@ -40,7 +40,7 @@ def test_first_star(test_data, expected):
 
 
 def test_second_star(test_data, expected):
-    solution = day16.my_func(test_data)
+    solution = day16.max_release_pressure_two_people(test_data, 26)
     if solution != expected:
         print("Your output is:")
         print(solution)

@@ -13,7 +13,12 @@
 # release pressure is the remaining time times the flow rate.
 # Work out the steps to release the most pressure in 30 minutes. What is the most pressure you can release?
 
-# Second star: description
+# Second star: You're worried that even with an optimal approach, the pressure released won't be enough. What if you got
+# one of the elephants to help you?
+# It would take you 4 minutes to teach an elephant how to open the right valves in the right order, leaving you with
+# only 26 minutes to actually execute your plan. Would having two of you working together be better, even if it means
+# having less time? (Assume that you teach the elephant before opening any valves yourself, giving you both the same
+# full 26 minutes.)
 
 import re
 
@@ -72,7 +77,6 @@ def get_next_step(step, valves):
                     time_left
                 )
             }]
-
     return next_steps
 
 
@@ -103,6 +107,50 @@ def max_release_pressure(data, total_time):
     return max_pressure
 
 
+def max_release_pressure_two_people(data, total_time):
+    valves = create_valves(data)
+    non_zero_valves = [valve for valve, value in valves.items() if value['flow'] > 0]
+    first_step = {
+        'valves': [{'AA': 0}],
+        'position': 'AA',
+        'valves_to_open': non_zero_valves,
+        'time_left': total_time,
+        'obtained_pressure': 0,
+        'dream_pressure': best_max_pressure([valves[valve]['flow'] for valve in non_zero_valves], total_time)
+    }
+    all_paths = [[first_step, first_step]]
+    max_pressure = 0
+    while len(all_paths) > 0:
+        if (
+                all_paths[0][0]['dream_pressure'] + all_paths[0][0]['obtained_pressure'] +
+                all_paths[0][1]['dream_pressure'] + all_paths[0][1]['obtained_pressure']
+        ) < max_pressure:
+            all_paths = all_paths[1:]
+        else:
+            if (all_paths[0][0]['obtained_pressure'] + all_paths[0][1]['obtained_pressure']) > max_pressure:
+                max_pressure = all_paths[0][0]['obtained_pressure'] + all_paths[0][1]['obtained_pressure']
+                print(f"Max pressure increased to {max_pressure}, still {len(all_paths)} branches to explore")
+            if (all_paths[0][0]['dream_pressure'] + all_paths[0][1]['dream_pressure']) > 0:
+                new_paths0 = get_next_step(all_paths[0][0], valves)
+                new_paths1 = get_next_step(all_paths[0][1], valves)
+                new_paths_two_people = []
+                for p0 in new_paths0:
+                    for p1 in new_paths1:
+                        if (
+                                (p0['valves'][-1].keys() != p1['valves'][-1].keys()) |
+                                (list(p0['valves'][-1].values())[0] == 0) |
+                                (list(p1['valves'][-1].values())[0] == 0)
+                        ):
+                            valves_to_open = [v for v in p0['valves_to_open'] if v in p1['valves_to_open']]
+                            p0['valves_to_open'] = valves_to_open
+                            p1['valves_to_open'] = valves_to_open
+                            new_paths_two_people += [[p0, p1]]
+                all_paths = new_paths_two_people + all_paths[1:]
+            else:
+                all_paths = all_paths[1:]
+    return max_pressure
+
+
 def run(data_dir, star):
     with open(f'{data_dir}/input-day16.txt', 'r') as fic:
         data = [x for x in fic.read().split('\n')[:-1]]
@@ -110,7 +158,7 @@ def run(data_dir, star):
     if star == 1:  # The final answer is: 1647
         solution = max_release_pressure(data, 30)
     elif star == 2:  # The final answer is:
-        solution = my_func(data)
+        solution = max_release_pressure_two_people(data, 26)
     else:
         raise Exception('Star number must be either 1 or 2.')
 
